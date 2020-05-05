@@ -65,6 +65,7 @@ topxr+="write.table(x[1:floor(nrow(x) * tp), ], file=stdout(), "
 topxr+="sep='\t', col.names=FALSE, row.names=FALSE, quote=FALSE); "
 
 PROJDIR="/mnt/lfs2/stah3621/devils/contemporary_sel"
+GITDIR="/mnt/lfs2/stah3621/devils/contemporary_historical_sel_devils"
 RUN="2019-2-22"
 RESULTSDIR="${PROJDIR}/angsd_2019-01-18/next"
 BRENDIR="/mnt/lfs2/bepstein/devilsrapture"
@@ -88,7 +89,7 @@ gif="${PROJDIR}/brendan/script/genomic_inflation_correction.r"
 q2p="${PROJDIR}/brendan/script/quantile_to_p.r"
 compsnps="${PROJDIR}/brendan/script/css.r"
 combiner="${PROJDIR}/brendan/script/combine_annotations.py"
-snp2go="${PROJDIR}/brendan/script/snp2go.r"
+snp2go="${GITDIR}/script/snp2go.r"
 
 mkdir -p $RESULTDIR
 mkdir -p $SCRIPTDIR
@@ -419,12 +420,12 @@ if [[ $SLURM_SUBMIT_DIR ]]; then
     cat "../annotation_top1.0/composite.snps.everything.top.candidates" | \
     sort | uniq > "selection.composite.candidates.txt" \
         || { echo "catting composite candidates failed"; exit 1; }
-    cat "../annotation_top1.0/composite.snps.everything.top.noncandidates" \
+    cat "../annotation_top1.0/composite.snps.everything.top.noncandidates"| \
         sort | uniq | \
         comm -23 - "selection.composite.candidates.txt" | \
         awk '{print $1 "\t" $2 "\t"}; ' | \
         sort | uniq > "selection.composite.noncandidates.txt" \
-        || { echo "catting composite non-candidates failed"; }   # ; exit 1;
+        || { echo "catting composite non-candidates failed"; exit 1;}
 
     $snp2go --candidates "selection.composite.candidates.txt" --non-candidates "selection.composite.noncandidates.txt" --gtf $GTF --go $GO   --output "top.composite.snps.go.100000bp" \
         || { echo "SNP2GO failed on composite ${dist}, ${tp}"; exit 1; }

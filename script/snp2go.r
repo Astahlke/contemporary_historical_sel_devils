@@ -18,12 +18,13 @@
 
         igraph, optparse, SNP2GO"
 
+library(optparse)
+
 library(GO.db, lib="/mnt/lfs2/stah3621/bin/R")
 library(goProfiles, lib="/mnt/lfs2/stah3621/bin/R")
 library(hash, lib="/mnt/lfs2/stah3621/bin/R")
 library(SNP2GO, lib="/mnt/lfs2/stah3621/bin/R")
 library(GenomicRanges, lib="/mnt/lfs2/stah3621/bin/R")
-library(igraph, lib="/mnt/lfs2/stah3621/bin/R")
 
 #==============================================================================#
 
