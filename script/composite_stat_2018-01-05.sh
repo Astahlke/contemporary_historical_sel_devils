@@ -5,52 +5,24 @@
 #SBATCH --mail-type=ALL        # Type of email notification- BEGIN,END,FAIL,ALL
 #SBATCH --mail-user=amandastahlke@gmail.com # Email to which notifications will be sent
 
-# # Modified by Amanda Stahlke Jan 14 to run on new data and optimize best
-
-# Modified by Amanda Stahlke Sep 18 to exclude populations (Woolnorth and Mt William) that do not have both pre and post RAD data.
-
-# Modified by me (Amanda Stahlke) Dec 14 2017 to run on my own directory, excluding GEMMA results 
-
-# Original (from Brendan): 
 # Calculate composite statistics from individual statistics based on
-# ANGSD runs. Combines GWAS, allele frequency change, and time series.
-# This version uses ANGSD association analyses, GEMMA association
+# ANGSD runs. Combines allele frequency change, and time series.
+# This version uses ANGSD association analyses,
 # analyses, spatpg on binary environment value, Mathieson and McVean's
 # time series method, and allele frequency change.
 #
-# Differences from 2016-06-22 script:
-#
-#   1 - FDR is calculated for adjusted p-values
-#   2 - GEMMA p-values are calculated using just gamma rather than
-#       beta X gamma; I tried using these values as p-values, but they
-#       weren't really distributed right for that (min. around 0.9).
-#   3 - GO term enrichment is performed on the full set of candidates,
-#       not on each set separately
-#   4 - The candidates are identified somewhat differently:
-#       Top 1% of composite and
-#       Top 5% allele frequency change in >= 3 pops and
-#       FDR < 0.05 in M&M and
-#       Top 1% in composite GWAS
-#
-# Differences from 2016-09-13 script:
-#
-#   1 - Uses new tumor growth rate code that calculates growth rate
-#       across all tumors
-#
-# Differences from 2016-10-08 script
-#
-#   1 - Tumor growth rate calculated on log scale.
+# - FDR is calculated for adjusted p-values
+# - GO term enrichment is performed on the full set of candidates,
+# - Candidate SNPs are top 1% of composite stat
 #
 # INPUT
 #
 # process_rapture_2015_150609 -> rmdup_clone_filter_rapture_2015_150619 ->
 # merge_rapture_2015_clone_filter_150619_150625 ->
 # bowtie2_rapture_2015_allref_150904 -> aln_filter_2016-01-13 ->
-#   GWAS: angsd_2016-01-15 -> gwas_2016-04-19_* and 2016-10-14
 #   AF change and variance: angsd_2016-01-15 -> afchange_2016-01-26
 #   spatpg: angsd_2016-03-13 -> spatpg_2016-03-14a
 #   M&M: angsd_2016-03-13 -> mm_2016-05-27
-#   GEMMA: angsd_2016-01-15 -> vcf_2016-04-25 -> various gemma runs
 #
 # OUTPUT
 #
@@ -61,49 +33,24 @@
 # There are two steps:
 #
 #   1) Calculate an adjusted p-value using either a genomic inflation
-#      factor (for association and spatpg) or just based on the ranking
-#      (for allele frequency change). Some of the association runs do
-#      not really need much adjustment, but I adjust anyway.
+#      factor (for spatpg) or just based on the ranking
+#      (for allele frequency change). 
 #   2) Combine using Ma et al. (2015) DCMS statistic.
 #
 # I decided to use prevalence only as a covariate for spatpg.
-#
-# GEMMA is included - I ranked SNPs by the estimated size of the
-# large effect, and use the ranks as pseudo-pvalues, similar to the
-# way I use ranks for allele frequency change. For ANGSD, spatpg, and
+# I rank for allele frequency change. For ANGSD, spatpg, and
 # M&M, the p-values from the tests are included.
 #
 # The p-values and statistics are calculated for each SNP.
 #
 # SETTINGS
-MIN_STATS=11            # Minimum number of statistics at each site # Brendan's Oct-2106  ; What should this be? 
-#MIN_STATS_NOGEMMA=11    # Minimum number of statistics for non-gemma composite *Ultimately this is redundant ARS 01/04/18
-MIN_STATS_AF=4          # Minimum number of AF statistics for AF composite # unchanged from Brendan's Oct-2016 script
-#MIN_STATS_GWAS=9        # Minimum number of gwas statistics for GWAS composite
-MIN_STATS_TS=4          # Minimum number of time series statistics for time series # unchanged from Brendan's Oct-2016 script
+MIN_STATS=11            # Minimum number of statistics at each SNP 
+MIN_STATS_AF=4          # Minimum number of AF statistics for AF composite 
+MIN_STATS_TS=4          # Minimum number of time series statistics for time series 
 MAX_P=0.99999           # Maximum p-value (change p = 1 to this for assoc. and spatpg)
 SPATPG_MINP=0.00005     # Change spatpg p-values of 0 to this to let the DCMS algorithm work
 GO_FDR=0.05             # False discovery rate for SNP2GO
 #
-# To choose the optimal number of PCs, I just took the run with
-# the lowest inflation factor. In some cases, it was very close, and
-# probably unnecessary, but this seems objective.
-#AGE_ADJUST="no_adjust"   # PCA adjustment for age at first infection association
-#CC_ADJUST="no_adjust"    # PCA adjustment for case-control
-#SURV_ADJUST="adjust_5"  # PCA adjustment for survival after disease
-#RATE_ADJUST="no_adjust" # PCA adjustment for tumor growth rate
-#
-# GEMMA runs
-#GEMMA_AGE_F="gemma_bslmm_2016-04-28f_age"
-#GEMMA_AGE_M="gemma_bslmm_2016-04-28m_age"
-#GEMMA_CC_F="gemma_bslmm_2016-05-03f_unc_cc"
-#GEMMA_CC_M="gemma_bslmm_2016-05-03m_unc_cc"
-#GEMMA_SURV_F="gemma_bslmm_2016-05-03f_unc_survival"
-#GEMMA_SURV_M="gemma_bslmm_2016-05-03m_unc_survival"
-#GEMMA_RATE_F="gemma_bslmm_2016-10-14f_unc_rate"
-#GEMMA_RATE_M="gemma_bslmm_2016-10-14m_unc_rate"
-#
-
 # How to go from path2 to path1
 relpath="""
 import sys
@@ -120,18 +67,12 @@ topxr+="sep='\t', col.names=FALSE, row.names=FALSE, quote=FALSE); "
 PROJDIR="/mnt/lfs2/stah3621/devils/contemporary_sel"
 RUN="2019-2-22"
 RESULTSDIR="${PROJDIR}/angsd_2019-01-18/next"
-#BREN_RESULTS_DIR="${PROJDIR}/brendan/angsd_2016-01-15/next"
 BRENDIR="/mnt/lfs2/bepstein/devilsrapture"
 OUTDIR="${RESULTSDIR}/composite_stat/${RUN}"
 RESULTDIR="${OUTDIR}/results"
 SCRIPTDIR="${RESULTDIR}/script_copies"
 LOGDIR="${RESULTDIR}/log"
 WORKDIR="${RESULTDIR}/working"
-#GWAS_AGEDIR="${OUTDIR}/../../gwas/2016-04-19_age/results" ## modified ARS 05-19
-#GWAS_SURVDIR="${OUTDIR}/../../gwas/2016-04-19_survival/results"
-#GWAS_RATEDIR="${OUTDIR}/../../gwas/2016-10-14_rate/results"
-# WAS_CCDIR="${OUTDIR}/../../gwas/2016-04-19_cc/results"
-#GEMMADIR="${OUTDIR}/../../vcf/2016-04-25/next/gwas"
 AFDIR="${RESULTSDIR}/afchange/2019-01-21"
 SPATDIR="${RESULTSDIR}/time_series/spatpg_2016-03-14a"
 MMDIR="${RESULTSDIR}/time_series/mm_2019-02-20"
@@ -148,7 +89,6 @@ q2p="${PROJDIR}/brendan/script/quantile_to_p.r"
 compsnps="${PROJDIR}/brendan/script/css.r"
 combiner="${PROJDIR}/brendan/script/combine_annotations.py"
 snp2go="${PROJDIR}/brendan/script/snp2go.r"
-#gemmasum="${PROJDIR}/script/summarize_gemma_bslmm_gamma.r"
 
 mkdir -p $RESULTDIR
 mkdir -p $SCRIPTDIR
@@ -170,7 +110,7 @@ done
 
 if [[ $SLURM_SUBMIT_DIR ]]; then
 
-    module load R/3.4.3 ## version? 
+    module load R/3.4.3
     module load bedtools ## version?
 
     set -u
@@ -200,104 +140,7 @@ if [[ $SLURM_SUBMIT_DIR ]]; then
     allfiles=$affiles
 	echo $affiles
 	echo $allfiles
-
-   # gwasfiles=""
-    # Do the same thing to the gemma files, but also change the way
-    # the p-values are calculated
-#    $gemmasum --output "age_f.gemma.scores.tsv" \
-#        "${GEMMADIR}/${GEMMA_AGE_F}/results/all/output/output.param.txt" \
-#        || { echo "adjusting gemma failed"; exit 1; }
-#    $q2p --output "age_f.gemma.adjusted.tsv" \
-#        "age_f.gemma.scores.tsv" \
-#        || { echo "adjusting gemma failed"; exit 1; }
-#    allfiles+="age_f.gemma.adjusted.tsv "
-#   gwasfiles+="age_f.gemma.adjusted.tsv "
-#   $gemmasum --output "age_m.gemma.scores.tsv" \
-#       "${GEMMADIR}/${GEMMA_AGE_M}/results/all/output/output.param.txt" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   $q2p --output "age_m.gemma.adjusted.tsv" \
-#       "age_m.gemma.scores.tsv" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   allfiles+="age_m.gemma.adjusted.tsv "
-#   gwasfiles+="age_m.gemma.adjusted.tsv "
-#   $gemmasum --output "cc_f.gemma.scores.tsv" \
-#       "${GEMMADIR}/${GEMMA_CC_F}/results/all/output/output.param.txt" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   $q2p --output "cc_f.gemma.adjusted.tsv" \
-#       "cc_f.gemma.scores.tsv" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   allfiles+="cc_f.gemma.adjusted.tsv "
-#   gwasfiles+="cc_f.gemma.adjusted.tsv "
-#   $gemmasum --output "cc_m.gemma.scores.tsv" \
-#       "${GEMMADIR}/${GEMMA_CC_M}/results/all/output/output.param.txt" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   $q2p --output "cc_m.gemma.adjusted.tsv" \
-#       "cc_m.gemma.scores.tsv" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   allfiles+="cc_m.gemma.adjusted.tsv "
-#   gwasfiles+="cc_m.gemma.adjusted.tsv "
-#   $gemmasum --output "survival_f.gemma.scores.tsv" \
-#       "${GEMMADIR}/${GEMMA_SURV_F}/results/all/output/output.param.txt" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   $q2p --output "survival_f.gemma.adjusted.tsv" \
-#       "survival_f.gemma.scores.tsv" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   allfiles+="survival_f.gemma.adjusted.tsv "
-#   gwasfiles+="survival_f.gemma.adjusted.tsv "
-#   $gemmasum --output "survival_m.gemma.scores.tsv" \
-#       "${GEMMADIR}/${GEMMA_SURV_M}/results/all/output/output.param.txt" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   $q2p --output "survival_m.gemma.adjusted.tsv" \
-#       "survival_m.gemma.scores.tsv" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   allfiles+="survival_m.gemma.adjusted.tsv "
-#   gwasfiles+="survival_m.gemma.adjusted.tsv "
-#   $gemmasum --output "rate_f.gemma.scores.tsv" \
-#       "${GEMMADIR}/${GEMMA_RATE_F}/results/all/output/output.param.txt" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   $q2p --output "rate_f.gemma.adjusted.tsv" \
-#       "rate_f.gemma.scores.tsv" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   allfiles+="rate_f.gemma.adjusted.tsv "
-#   gwasfiles+="rate_f.gemma.adjusted.tsv "
-#   $gemmasum --output "rate_m.gemma.scores.tsv" \
-#       "${GEMMADIR}/${GEMMA_RATE_M}/results/all/output/output.param.txt" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   $q2p --output "rate_m.gemma.adjusted.tsv" \
-#       "rate_m.gemma.scores.tsv" \
-#       || { echo "adjusting gemma failed"; exit 1; }
-#   allfiles+="rate_m.gemma.adjusted.tsv "
-#   gwasfiles+="rate_m.gemma.adjusted.tsv "
-
-    # Adjust spatpg and association
-#    $gif --output "gwas.age.adjusted.tsv" \
-#        --fdr --max-p $MAX_P --fdr \
-#        "${GWAS_AGEDIR}/${AGE_ADJUST}/output.scores.tsv" \
-#        || { echo "adjusting association failed"; exit 1; }
-#    allfiles+="gwas.age.adjusted.tsv "
-#    allfiles_nogemma+="gwas.age.adjusted.tsv "
-#    gwasfiles+="gwas.age.adjusted.tsv "
-#    $gif --output "gwas.cc.adjusted.tsv" \
-#        --fdr --max-p $MAX_P \
-#        "${GWAS_CCDIR}/${CC_ADJUST}/output.scores.tsv" \
-#        || { echo "adjusting association failed"; exit 1; }
-#    allfiles+="gwas.cc.adjusted.tsv "
-#    allfiles_nogemma+="gwas.cc.adjusted.tsv "
-#    gwasfiles+="gwas.cc.adjusted.tsv "
-#    $gif --output "gwas.survival.adjusted.tsv" \
-#        --fdr --max-p $MAX_P \
-#        "${GWAS_SURVDIR}/${SURV_ADJUST}/output.scores.tsv" \
-#        || { echo "adjusting association failed"; exit 1; }
-#    allfiles+="gwas.survival.adjusted.tsv "
-#    allfiles_nogemma+="gwas.survival.adjusted.tsv "
-#    gwasfiles+="gwas.survival.adjusted.tsv "
-#    $gif --output "gwas.rate.adjusted.tsv" \
-#        --fdr --max-p $MAX_P \
-#        "${GWAS_RATEDIR}/${RATE_ADJUST}/output.scores.tsv" \
-#        || { echo "adjusting association failed"; exit 1; }
-#    allfiles+="gwas.rate.adjusted.tsv "
-#    allfiles_nogemma+="gwas.rate.adjusted.tsv "
-#    gwasfiles+="gwas.rate.adjusted.tsv "
+    # Adjust spatpg
 
     tsfiles=""
     $gif --output "spatpg.adjusted.tsv" --double-p --min-p $SPATPG_MINP \
@@ -336,7 +179,7 @@ if [[ $SLURM_SUBMIT_DIR ]]; then
 
     # Make a composite score just based on time series
     $compsnps --min-tests $MIN_STATS_TS --output "composite.snps.timeseries" \
-        $tsfiles \
+        $tsfiles \djust spatpg
 	|| { echo "combining time series failed"; exit 1; }
 
     # Make a composite score based on everything
@@ -568,34 +411,12 @@ if [[ $SLURM_SUBMIT_DIR ]]; then
         "noncandidates.txt" \
         || { echo "making non-candidates file failed"; exit 1; }
 
-    # Combined GO term enrichment
-    # I had originally hesitated to combine all the SNPs like this,
-    # because there are slightly different lists of eligible SNPs for
-    # each analysis, but I think it isn't too harmful.
-    # - Parallel change SNPs
-    # - MM FDR < 0.05 SNPs
-    # - Top 1% GWAS SNPs
-    # - Top 1% composite SNPs
-    cd $RESULTDIR
+    # GO term enrichment
+   cd $RESULTDIR
    mkdir -p "go_enrichment"
     cd "go_enrichment"
-#"../annotation_top1.0/composite.snps.everything.top.noncandidates" \
-#"../annotation_top1.0/composite.snps.everything.top.candidates" | \
-#    cat "../mm_significant_3_pops/candidates.txt" \
-#        "../spatpg_significant/candidates.txt" \
-#        "../parallel_top5.0/candidates.txt"  | \
-#    sort | uniq > "selection.candidates.txt" \
-#        || { echo "combining selection candidates failed"; exit 1; }
-#    cat "../mm_significant_3_pops/noncandidates.txt" \
-#        "../spatpg_significant/noncandidates.txt" \
-#        "../parallel_top5.0/noncandidates.txt" | \
-#        sort | uniq | \
-#        comm -23 - "selection.candidates.txt" | \
-#        awk '{print $1 "\t" $2 "\t"}; ' | \
-#        sort | uniq > "selection.noncandidates.txt" \
-#        || { echo "combining selection non-candidates failed"; exit 1; }
 
-        cat "../annotation_top1.0/composite.snps.everything.top.candidates" | \
+    cat "../annotation_top1.0/composite.snps.everything.top.candidates" | \
     sort | uniq > "selection.composite.candidates.txt" \
         || { echo "catting composite candidates failed"; exit 1; }
     cat "../annotation_top1.0/composite.snps.everything.top.noncandidates" \
@@ -605,17 +426,10 @@ if [[ $SLURM_SUBMIT_DIR ]]; then
         sort | uniq > "selection.composite.noncandidates.txt" \
         || { echo "catting composite non-candidates failed"; }   # ; exit 1;
 
-#    $snp2go --candidates "selection.candidates.txt" --non-candidates "selection.noncandidates.txt" --gtf $GTF --go $GO   --output "top.snps.go.100000bp" \
-#        || { echo "SNP2GO failed on ${dist}, ${tp}"; exit 1; }
     $snp2go --candidates "selection.composite.candidates.txt" --non-candidates "selection.composite.noncandidates.txt" --gtf $GTF --go $GO   --output "top.composite.snps.go.100000bp" \
         || { echo "SNP2GO failed on composite ${dist}, ${tp}"; exit 1; }
 
 else
-    #sfile="${SCRIPTDIR}/$(date '+%Y-%m-%d-%H%M')-$(basename $0)-${1}"
-    #rm -f $sfile
-    #cp $0 $sfile
-    #cd $WORKDIR
-    #echo $WORKDIR
 
    d=$(date '+%Y-%m-%d-%H%M')
    sfile="${SCRIPTDIR}/${d}-$(basename $0)"
@@ -628,6 +442,5 @@ else
    cd $WORKDIR
    echo $WORKDIR
    
- #qsub -q reg $sfile 
   sbatch --job-name="compstat" $sfile
 fi
