@@ -3,7 +3,7 @@ Code to study contemporary and historical selection in devils. Manuscript in pre
 
 ## Raw input data
 ### contemporary 
-- bam files from 3000+ individual devils 
+- Demultiplexed sequence data has been deposited at NCBI under Bio-Project PRJNA306495 (http://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA306495) and BioProject PRJNA634071 (http://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA634071). 
 - metadata for individual devils
 
 ### historical
@@ -16,9 +16,9 @@ Code to study contemporary and historical selection in devils. Manuscript in pre
 - snp2go.R
 
 ## Results 
-May or may not upload these. 
 ### contemporary 
-- composite stat for contemporary selction
+- composite stat for contemporary selction: composite.snps.everything.top.genes.100000bp.txt
+- PAML 
 
 ### 
 - PAML results for historical selection
