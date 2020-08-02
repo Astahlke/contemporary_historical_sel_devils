@@ -81,10 +81,10 @@ result <- snp2go(gtf=gtffile,
                  goFile=gofile,
                  candidateSNPs=candidates,
                  noncandidateSNPs=noncandidates,
-                 FDR=fdr,
+                 FDR=.05,
                  runs=10000,
                  extension=100000,
-                 min.regions=10)
+                 min.regions=1)
 
 #-----------------------------------------------------------------------
 #
@@ -92,7 +92,7 @@ result <- snp2go(gtf=gtffile,
 #
 #-----------------------------------------------------------------------
 
-write.table(result$enriched, file=outfile, sep='\t', row.names=FALSE,
+write.table(result$enriched, file=paste0(outfile, ".tsv"), sep='\t', row.names=FALSE,
             quote=FALSE)
 
 result$enriched$GO.def    <- as.character(result$enriched$GO.def)
@@ -102,14 +102,25 @@ result$enriched$GO        <- as.character(result$enriched$GO)
 # Get all enriched GO terms of GFF analysis:
 gff.significant.terms <- result$enriched$GO
         
+# Get the candidate SNPs and regions associated w GO terms  
 gffcans.df <- data.frame()
+gffregions.df <- data.frame()
+
 for(i in 1:length(gff.significant.terms)){
 	gff.cans <- as.data.frame(candidates[unlist(as.list(result$go2ranges[["candidates"]][gff.significant.terms[i]]))])
 	gff.cans$GOterm <- gff.significant.terms[i]
 	gffcans.df <- rbind(gff.cans, gffcans.df)
+
+	gff.regions <- as.data.frame(
+		result$regions[unlist(as.list(
+		result$go2ranges[["regions"]][gff.significant.terms[i]]))])
+	gff.regions$GOterm <- gff.significant.terms[i]
+	gffregions.df <- rbind(gff.regions, gffregions.df)
 }
 
-write.table(gffcans.df, file = "candidates.goterms.tsv", sep='\t', row.names=FALSE,
+write.table(gffcans.df, file = paste0(outfile,".candidateSNPs.tsv"), sep='\t', row.names=FALSE,
+            quote=FALSE)
+write.table(gffregions.df, file = paste0(outfile, ".GOregions.tsv", sep='\t', row.names=FALSE,
             quote=FALSE)
 #-----------------------------------------------------------------------
 #

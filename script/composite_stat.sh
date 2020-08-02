@@ -77,6 +77,7 @@ WORKDIR="${RESULTDIR}/working"
 AFDIR="${RESULTSDIR}/afchange/2019-01-21"
 SPATDIR="${RESULTSDIR}/time_series/spatpg_2016-03-14a"
 MMDIR="${RESULTSDIR}/time_series/mm_2019-02-20"
+
 ANNFILE="${BRENDIR}/data/annotation/biomart_reduced.bed"
 GTF="${GITDIR}/annotation/go/Sarcophilus_harrisii.DEVIL7.0.100.gtf.gz"
 GO="${GITDIR}/annotation/go/goterms.tsv"
@@ -427,7 +428,7 @@ if [[ $SLURM_SUBMIT_DIR ]]; then
         sort | uniq > "selection.composite.noncandidates.txt" \
         || { echo "catting composite non-candidates failed"; exit 1;}
 
-    $snp2go --candidates "selection.composite.candidates.txt" --non-candidates "selection.composite.noncandidates.txt" --gtf $GTF --go $GO   --output "top.composite.snps.go.100000bp" \
+    $snp2go --candidates "selection.composite.candidates.txt" --non-candidates "selection.composite.noncandidates.txt" --gtf $GTF --go $GO --output "top.composite.snps.go.100000bp" \
         || { echo "SNP2GO failed on composite ${dist}, ${tp}"; exit 1; }
 
 else
