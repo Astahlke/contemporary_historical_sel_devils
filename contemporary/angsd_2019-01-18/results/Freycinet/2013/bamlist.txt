@@ -1,0 +1,12 @@
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009104790631_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009104811351_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009104818981_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009104820975_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009104870897_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009104938840_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009106237585_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009106246135_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009106246522_sorted.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009106494080_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009106545663_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009106676823_R15_R17_ms.bam

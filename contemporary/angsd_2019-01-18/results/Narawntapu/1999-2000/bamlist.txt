@@ -1,0 +1,4 @@
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009101469085_R15_R18_cat_rg.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009101689482_R15_R17_ms.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/982009101704704_R15_R18_cat_rg.bam
+/mnt/lfs2/stah3621/devils/contemporary_sel/6.0_All_samples_combined/985120016000835_R15_R18_ms.bam
