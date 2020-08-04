@@ -1,0 +1,446 @@
+cat: sort: No such file or directory
+Loading required package: methods
+Loading required package: AnnotationDbi
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colnames, do.call,
+    duplicated, eval, evalq, Filter, Find, get, grep, grepl, intersect,
+    is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
+    paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
+    Reduce, rownames, sapply, setdiff, sort, table, tapply, union,
+    unique, unsplit, which, which.max, which.min
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: IRanges
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following objects are masked from ‘package:base’:
+
+    colMeans, colSums, expand.grid, rowMeans, rowSums
+
+
+hash-2.2.6 provided by Decision Patterns
+
+
+Attaching package: ‘hash’
+
+The following object is masked from ‘package:AnnotationDbi’:
+
+    keys
+
+The following objects are masked from ‘package:IRanges’:
+
+    values, values<-
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    values, values<-
+
+Loading required package: GenomicRanges
+Loading required package: GenomeInfoDb
+Warning messages:
+1: replacing previous import ‘AnnotationDbi::keys’ by ‘hash::keys’ when loading ‘SNP2GO’ 
+2: replacing previous import ‘hash::values’ by ‘GenomicRanges::values’ when loading ‘SNP2GO’ 
+3: replacing previous import ‘hash::values<-’ by ‘GenomicRanges::values<-’ when loading ‘SNP2GO’ 
+
+Attaching package: ‘igraph’
+
+The following object is masked from ‘package:GenomicRanges’:
+
+    union
+
+The following objects are masked from ‘package:IRanges’:
+
+    simplify, union
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    compare, union
+
+The following objects are masked from ‘package:BiocGenerics’:
+
+    normalize, union
+
+The following objects are masked from ‘package:stats’:
+
+    decompose, spectrum
+
+The following object is masked from ‘package:base’:
+
+    union
+
+Processing /mnt/lfs2/bepstein/devilsrapture/data/annotation/go_150413/Sarcophilus_harrisii.DEVIL7.0.79.gtf.gz
+Processing /mnt/lfs2/bepstein/devilsrapture/data/annotation/go_150413/goterms.tsv
+Mapping GO terms to genomic regions
+Organizing GO categories by level
+Calculating number of candidate SNPs and non-candidate SNPs
+associated with GO terms from different ontology levels:
+candidates associated with the MF ontology:
+Level 16: 0
+Level 15: 0
+Level 14: 0
+Level 13: 0
+Level 12: 1
+Level 11: 5
+Level 10: 14
+Level 9: 32
+Level 8: 38
+Level 7: 62
+Level 6: 77
+Level 5: 84
+Level 4: 90
+Level 3: 99
+Level 2: 99
+Level 1: 99
+noncandidates associated with the MF ontology:
+Level 16: 0
+Level 15: 186
+Level 14: 229
+Level 13: 354
+Level 12: 608
+Level 11: 1380
+Level 10: 2954
+Level 9: 6868
+Level 8: 8574
+Level 7: 12222
+Level 6: 16301
+Level 5: 18056
+Level 4: 18535
+Level 3: 20405
+Level 2: 20572
+Level 1: 20572
+candidates associated with the BP ontology:
+Level 20: 0
+Level 19: 0
+Level 18: 0
+Level 17: 3
+Level 16: 3
+Level 15: 8
+Level 14: 19
+Level 13: 37
+Level 12: 47
+Level 11: 59
+Level 10: 67
+Level 9: 72
+Level 8: 81
+Level 7: 86
+Level 6: 93
+Level 5: 93
+Level 4: 93
+Level 3: 93
+Level 2: 94
+Level 1: 94
+noncandidates associated with the BP ontology:
+Level 20: 0
+Level 19: 49
+Level 18: 273
+Level 17: 526
+Level 16: 1159
+Level 15: 2423
+Level 14: 4892
+Level 13: 8221
+Level 12: 9994
+Level 11: 12211
+Level 10: 14009
+Level 9: 15381
+Level 8: 17092
+Level 7: 17719
+Level 6: 18587
+Level 5: 18942
+Level 4: 19261
+Level 3: 19369
+Level 2: 19464
+Level 1: 19495
+candidates associated with the CC ontology:
+Level 18: 0
+Level 17: 0
+Level 16: 1
+Level 15: 5
+Level 14: 8
+Level 13: 15
+Level 12: 25
+Level 11: 47
+Level 10: 54
+Level 9: 58
+Level 8: 76
+Level 7: 77
+Level 6: 80
+Level 5: 89
+Level 4: 92
+Level 3: 92
+Level 2: 94
+Level 1: 94
+noncandidates associated with the CC ontology:
+Level 18: 0
+Level 17: 20
+Level 16: 49
+Level 15: 376
+Level 14: 1389
+Level 13: 2623
+Level 12: 4877
+Level 11: 9170
+Level 10: 10471
+Level 9: 11370
+Level 8: 14762
+Level 7: 15063
+Level 6: 16188
+Level 5: 18120
+Level 4: 18773
+Level 3: 18822
+Level 2: 19173
+Level 1: 19173
+Updating mappings of GO terms to SNPs and genomic regions
+for inclusive analysis
+Testing GO terms for over-representation of candidate SNPs
+No significant GO terms found
+Warning messages:
+1: In .Seqinfo.mergexy(x, y) :
+  Each of the 2 combined objects has sequence levels not in the other:
+  - in 'x': GL834412.1, GL834413.1, GL834415.1, GL834416.1, GL834418.1, GL834419.1, GL834420.1, GL834421.1, GL834422.1, GL834423.1, GL834424.1, GL834425.1, GL834426.1, GL834428.1, GL834429.1, GL834431.1, GL834434.1, GL834435.1, GL834436.1, GL834437.1, GL834438.1, GL834439.1, GL834440.1, GL834441.1, GL834442.1, GL834443.1, GL834444.1, GL834445.1, GL834446.1, GL834448.1, GL834450.1, GL834451.1, GL834452.1, GL834453.1, GL834454.1, GL834455.1, GL834456.1, GL834457.1, GL834458.1, GL834459.1, GL834460.1, GL834461.1, GL834462.1, GL834463.1, GL834465.1, GL834466.1, GL834467.1, GL834469.1, GL834470.1, GL834471.1, GL834474.1, GL834475.1, GL834477.1, GL834480.1, GL834481.1, GL834482.1, GL834483.1, GL834485.1, GL834486.1, GL834487.1, GL834488.1, GL834489.1, GL834490.1, GL834491.1, GL834492.1, GL834493.1, GL834494.1, GL834495.1, GL834496.1, GL834498.1, GL834499.1, GL834500.1, GL834501.1, GL834502.1, GL834503.1, GL834504.1, GL83450 [... truncated]
+2: In .Seqinfo.mergexy(x, y) :
+  Each of the 2 combined objects has sequence levels not in the other:
+  - in 'x': GL834435.1, GL834439.1, GL834443.1, GL834444.1, GL834456.1, GL834457.1, GL834470.1, GL834491.1, GL834495.1, GL834499.1, GL834504.1, GL834505.1, GL834510.1, GL834522.1, GL834523.1, GL834524.1, GL834525.1, GL834531.1, GL834533.1, GL834537.1, GL834547.1, GL834552.1, GL834553.1, GL834555.1, GL834556.1, GL834557.1, GL834561.1, GL834562.1, GL834563.1, GL834565.1, GL834566.1, GL834571.1, GL834572.1, GL834573.1, GL834574.1, GL834575.1, GL834576.1, GL834584.1, GL834585.1, GL834588.1, GL834592.1, GL834598.1, GL834611.1, GL834612.1, GL834613.1, GL834619.1, GL834626.1, GL834639.1, GL834640.1, GL834649.1, GL834669.1, GL834672.1, GL834673.1, GL834689.1, GL834697.1, GL834705.1, GL834708.1, GL834729.1, GL834735.1, GL834737.1, GL834741.1, GL834745.1, GL834750.1, GL834751.1, GL834763.1, GL834773.1, GL834781.1, GL834800.1, GL834802.1, GL834809.1, GL834813.1, GL834818.1, GL834820.1, GL834821.1, GL834828.1, GL834829.1, GL83483 [... truncated]
+Loading required package: methods
+Loading required package: AnnotationDbi
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colnames, do.call,
+    duplicated, eval, evalq, Filter, Find, get, grep, grepl, intersect,
+    is.unsorted, lapply, lengths, Map, mapply, match, mget, order,
+    paste, pmax, pmax.int, pmin, pmin.int, Position, rank, rbind,
+    Reduce, rownames, sapply, setdiff, sort, table, tapply, union,
+    unique, unsplit, which, which.max, which.min
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: IRanges
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following objects are masked from ‘package:base’:
+
+    colMeans, colSums, expand.grid, rowMeans, rowSums
+
+
+hash-2.2.6 provided by Decision Patterns
+
+
+Attaching package: ‘hash’
+
+The following object is masked from ‘package:AnnotationDbi’:
+
+    keys
+
+The following objects are masked from ‘package:IRanges’:
+
+    values, values<-
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    values, values<-
+
+Loading required package: GenomicRanges
+Loading required package: GenomeInfoDb
+Warning messages:
+1: replacing previous import ‘AnnotationDbi::keys’ by ‘hash::keys’ when loading ‘SNP2GO’ 
+2: replacing previous import ‘hash::values’ by ‘GenomicRanges::values’ when loading ‘SNP2GO’ 
+3: replacing previous import ‘hash::values<-’ by ‘GenomicRanges::values<-’ when loading ‘SNP2GO’ 
+
+Attaching package: ‘igraph’
+
+The following object is masked from ‘package:GenomicRanges’:
+
+    union
+
+The following objects are masked from ‘package:IRanges’:
+
+    simplify, union
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    compare, union
+
+The following objects are masked from ‘package:BiocGenerics’:
+
+    normalize, union
+
+The following objects are masked from ‘package:stats’:
+
+    decompose, spectrum
+
+The following object is masked from ‘package:base’:
+
+    union
+
+Processing /mnt/lfs2/bepstein/devilsrapture/data/annotation/go_150413/Sarcophilus_harrisii.DEVIL7.0.79.gtf.gz
+Processing /mnt/lfs2/bepstein/devilsrapture/data/annotation/go_150413/goterms.tsv
+Mapping GO terms to genomic regions
+Organizing GO categories by level
+Calculating number of candidate SNPs and non-candidate SNPs
+associated with GO terms from different ontology levels:
+candidates associated with the MF ontology:
+Level 16: 0
+Level 15: 0
+Level 14: 0
+Level 13: 1
+Level 12: 2
+Level 11: 3
+Level 10: 8
+Level 9: 27
+Level 8: 33
+Level 7: 44
+Level 6: 58
+Level 5: 61
+Level 4: 65
+Level 3: 70
+Level 2: 72
+Level 1: 72
+noncandidates associated with the MF ontology:
+Level 16: 0
+Level 15: 69
+Level 14: 80
+Level 13: 125
+Level 12: 195
+Level 11: 450
+Level 10: 942
+Level 9: 2235
+Level 8: 2804
+Level 7: 4031
+Level 6: 5389
+Level 5: 5985
+Level 4: 6150
+Level 3: 6817
+Level 2: 6868
+Level 1: 6868
+candidates associated with the BP ontology:
+Level 20: 0
+Level 19: 1
+Level 18: 2
+Level 17: 4
+Level 16: 4
+Level 15: 10
+Level 14: 20
+Level 13: 24
+Level 12: 32
+Level 11: 40
+Level 10: 44
+Level 9: 52
+Level 8: 59
+Level 7: 62
+Level 6: 64
+Level 5: 65
+Level 4: 65
+Level 3: 65
+Level 2: 65
+Level 1: 65
+noncandidates associated with the BP ontology:
+Level 20: 0
+Level 19: 15
+Level 18: 77
+Level 17: 155
+Level 16: 324
+Level 15: 722
+Level 14: 1494
+Level 13: 2582
+Level 12: 3175
+Level 11: 3940
+Level 10: 4544
+Level 9: 5006
+Level 8: 5633
+Level 7: 5837
+Level 6: 6126
+Level 5: 6253
+Level 4: 6369
+Level 3: 6406
+Level 2: 6440
+Level 1: 6453
+candidates associated with the CC ontology:
+Level 18: 0
+Level 17: 0
+Level 16: 0
+Level 15: 0
+Level 14: 3
+Level 13: 7
+Level 12: 15
+Level 11: 34
+Level 10: 35
+Level 9: 37
+Level 8: 46
+Level 7: 46
+Level 6: 54
+Level 5: 61
+Level 4: 66
+Level 3: 66
+Level 2: 67
+Level 1: 67
+noncandidates associated with the CC ontology:
+Level 18: 0
+Level 17: 4
+Level 16: 18
+Level 15: 134
+Level 14: 446
+Level 13: 828
+Level 12: 1573
+Level 11: 2952
+Level 10: 3348
+Level 9: 3635
+Level 8: 4771
+Level 7: 4867
+Level 6: 5271
+Level 5: 6000
+Level 4: 6230
+Level 3: 6246
+Level 2: 6364
+Level 1: 6364
+Updating mappings of GO terms to SNPs and genomic regions
+for inclusive analysis
+Testing GO terms for over-representation of candidate SNPs
+Found 10 significant GO terms.
+Testing significant GO terms for local effects
+There were 22 warnings (use warnings() to see them)
