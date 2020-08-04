@@ -18,13 +18,17 @@
 
         igraph, optparse, SNP2GO"
 
-library(optparse)
-
+# install.packages("igraph", lib="/mnt/lfs2/stah3621/bin/R")
 library(GO.db, lib="/mnt/lfs2/stah3621/bin/R")
 library(goProfiles, lib="/mnt/lfs2/stah3621/bin/R")
 library(hash, lib="/mnt/lfs2/stah3621/bin/R")
-library(SNP2GO, lib="/mnt/lfs2/stah3621/bin/R")
+library(SNP2GO, lib="/mnt/lfs2/stah3621/bin/R")     #load the package
 library(GenomicRanges, lib="/mnt/lfs2/stah3621/bin/R")
+library(igraph, lib="/mnt/lfs2/stah3621/bin/R")
+
+suppressMessages(library(optparse))
+suppressMessages(library(SNP2GO))
+suppressMessages(library(igraph))
 
 #==============================================================================#
 
@@ -81,9 +85,9 @@ result <- snp2go(gtf=gtffile,
                  goFile=gofile,
                  candidateSNPs=candidates,
                  noncandidateSNPs=noncandidates,
-                 FDR=.05,
+                 FDR=fdr,
                  runs=10000,
-                 extension=100000,
+                 extension=window,
                  min.regions=1)
 
 #-----------------------------------------------------------------------
@@ -92,42 +96,19 @@ result <- snp2go(gtf=gtffile,
 #
 #-----------------------------------------------------------------------
 
-write.table(result$enriched, file=paste0(outfile, ".tsv"), sep='\t', row.names=FALSE,
+write.table(result$enriched, file=outfile, sep='\t', row.names=FALSE,
             quote=FALSE)
 
 result$enriched$GO.def    <- as.character(result$enriched$GO.def)
 result$enriched$child.GOs <- as.character(result$enriched$child.GOs)
 result$enriched$GO        <- as.character(result$enriched$GO)
 
-# Get all enriched GO terms of GFF analysis:
-gff.significant.terms <- result$enriched$GO
-        
-# Get the candidate SNPs and regions associated w GO terms  
-gffcans.df <- data.frame()
-gffregions.df <- data.frame()
 
-for(i in 1:length(gff.significant.terms)){
-	gff.cans <- as.data.frame(candidates[unlist(as.list(result$go2ranges[["candidates"]][gff.significant.terms[i]]))])
-	gff.cans$GOterm <- gff.significant.terms[i]
-	gffcans.df <- rbind(gff.cans, gffcans.df)
-
-	gff.regions <- as.data.frame(
-		result$regions[unlist(as.list(
-		result$go2ranges[["regions"]][gff.significant.terms[i]]))])
-	gff.regions$GOterm <- gff.significant.terms[i]
-	gffregions.df <- rbind(gff.regions, gffregions.df)
-}
-
-write.table(gffcans.df, file = paste0(outfile,".candidateSNPs.tsv"), sep='\t', row.names=FALSE,
-            quote=FALSE)
-write.table(gffregions.df, file = paste0(outfile, ".GOregions.tsv", sep='\t', row.names=FALSE,
-            quote=FALSE)
 #-----------------------------------------------------------------------
 #
 # Group GO terms
 #
 #-----------------------------------------------------------------------
-library(igraph, lib="/mnt/lfs2/stah3621/bin/R")
 
 ch <- strsplit(as.character(result$enriched$child.GOs), ',')
 ch <- lapply(ch, function(x) if(length(x) == 0) {return(NA)} else {return(x)})
@@ -161,3 +142,37 @@ for(cl in unique(members)) {
 }
 close(f)
 close(ff)
+
+# I decided not to use this piece of code for now, but
+# I left it in case it is useful later (yes, I know this is
+# messy).
+# see also unfold.tree and denom.tree for useful ideas
+#par(mar=c(0, 0, 0, 0))
+#plot(0, 0, xlim=c(0, 1), ylim=c(0, 1), type='n')
+#h <- 1 / nrow(result$enriched)
+#w <- 1 / max(sapply(unique(components$membership), 
+#             function(cluster) {
+#                 terms <- vnames[components$membership == cluster] 
+#                 levels <- unlist(result$termlevel[terms])
+#                 max(levels) - min(levels) + 1
+#             }))
+#y <- 1
+#for(cl in unique(members)) {
+#    x <- 0
+#    terms <- vnames[members == cl]
+#    levels <- unlist(result$termlevel[terms])
+#    l <- 0
+#    level0 <- min(levels)
+#    leveli <- structure(1:length(levels), names=levels)
+#    for(i in sort(unique(levels))) {
+#        terms_at_level <- names(levels)[levels == i]
+#        for(tm in terms_at_level) {
+#            x <- w * l
+#            points(x, y, cex=0.5, col='blue', pch=19)
+#            text(x, y, cex=0.5, result$enriched$GO.def[result$enriched$GO == tm],
+#                 adj=0)
+#            y <- y - h
+#        }
+#        l <- l + 1
+#    }
+#}
