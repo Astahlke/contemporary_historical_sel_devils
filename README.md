@@ -6,6 +6,7 @@ Code to study contemporary and historical selection in devils. Manuscript in rev
 - Demultiplexed sequence data has been deposited at NCBI under BioProject PRJNA306495 (http://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA306495) and BioProject PRJNA634071 (http://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA634071). 
 - bamlists by population and cohort are found in 
 contemporary_historical_sel_devils/contemporary/angsd_2019-01-18/results/
+- Genotype likelihoods and allele frequency inputs can be found on dryad: doi:10.5061/dryad.jq2bvq872 
 
 ### historical
 - Orthology tables for devil, koala, oppossum, and tammar wallaby are found in 
