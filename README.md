@@ -1,4 +1,4 @@
-# Contemporary & Historical Selection in Tasmanian deviLs
+# Contemporary & Historical Selection in Tasmanian devils
 Code to study contemporary and historical selection in devils. Manuscript in review. 
 
 ## Raw input data
@@ -20,27 +20,31 @@ contemporary_historical_sel_devils/historical/00-getorthologID/
 - snp2go.R
 
 ### historical 
-00-biomart_getgeneID-allorthologs.R
-01-getseq.R
-addkoala_dataprep.sh
-all_models.sh
-dataprep.sh
-my_branch-site.py
-paml_parse_inputgeneID.sh
-parse_branchsite-null.py
-parse_branchsite-posi.py
-parse_getorf.py
-process_PAML_likelihoodratiotest.R
-reorder_fasta.py
-writetree.py 
+- 00-biomart_getgeneID-allorthologs.R
+- 01-getseq.R
+- addkoala_dataprep.sh
+- all_models.sh
+- dataprep.sh
+- my_branch-site.py
+- paml_parse_inputgeneID.sh
+- parse_branchsite-null.py
+- parse_branchsite-posi.py
+- parse_getorf.py
+- process_PAML_likelihoodratiotest.R
+- reorder_fasta.py
+- writetree.py 
 
 ## compare
-
+- test_for_ongoing_selection.R
+- OverRepresentation_MSigDB.R
+- candidatelistcomparison.R
 
 ## Key Results 
-- composite stat for contemporary selction: composite.snps.everything.top.genes.100000bp.txt
+- composite stat for contemporary selection: contemporary/angsd_2019-01-18/next/composite_stat/2019-2-22/results/annotation_top1.0/composite.snps.everything.top.genes.100000bp.txt 
 - combined raw paml results: 
+contemporary_historical_sel_devils/historical/04-parsed_paml_out/
 	-  paml_nullBS_wgcan_koala_111617.tsv 
 	- paml_posiBS_wgcan_koala_111617.tsv
-- Likelihood ratio test for all paml results: all_paml_results.csv 
+- Likelihood ratio test for all paml results: contemporary_historical_sel_devils/historical/all_paml_results.csv 
+- Gene set overlap results: compare/ongoing_selection_functional.csv 
 
