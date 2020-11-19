@@ -5,7 +5,7 @@
 #
 # Yeaman, Gerstein, Hodgins, Whitlock. Quantifying how constraints limit the diversity of viable routes to adaptation.=
 # Plos Genetics. 2018. https://doi.org/10.1371/journal.pgen.1007717. 
-#   For each statistic (here, af & mm), calculate c-score and p-value
+#   For each statistic (af & mm), calculate c-score and p-value
 #
 # NOTE
 #
@@ -21,7 +21,6 @@
 #==============================================================================#
 
 # devtools::install_github("samyeaman/dgconstraint", build_vignettes = TRUE)
-# browseVignettes(package = "dgconstraint")
 library("dgconstraint")
 
 
@@ -72,6 +71,7 @@ names(data) <- list.files("all_composite_stat_results/2020-10-22/results",
 df <- do.call(cbind, lapply(data, as.data.frame))
 df[,1] <- paste0(df$Fentonbury.afchange.adjusted.tsv.scaffold, "_", df$Fentonbury.afchange.adjusted.tsv.start) # replace scaffold with full SNP
 colnames(df)[1] <- "SNP"
+View(df)
 
 df <-  df %>%
   select("SNP", contains("adjp")) %>%
@@ -88,12 +88,13 @@ af_matrix <- df %>%
 sum(rowSums(is.na(af_matrix))==0)/nrow(af_matrix) # only 43% have no missing
 
 #### no adjustment
-c_score_af <- pairwise_c_chisq(af_matrix, num_permute = 10000, na.rm = T) # 3.725592
+c_score_af <- pairwise_c_chisq(af_matrix, num_permute = 10000, na.rm = T) #  4.930221
 p_value_af <- allwise_p_chisq(af_matrix, num_permute = 10000, na.rm = T) # 1e-04
 # Warning message: In allwise_p_chisq(af_matrix, num_permute = 10000, na.rm = T) Note: estimated p-value is lower than 1/(number of permutations)
 
-c_score_mm <- pairwise_c_chisq(mm_matrix, num_permute = 10000, na.rm = T) # 4.974022
+c_score_mm <- pairwise_c_chisq(mm_matrix, num_permute = 10000, na.rm = T) #3.72559
 p_value_mm <- allwise_p_chisq(mm_matrix, num_permute = 10000, na.rm = T) # 1e-04
+# Warning message: In allwise_p_chisq(af_matrix, num_permute = 10000, na.rm = T) Note: estimated p-value is lower than 1/(number of permutations)
 
 
 #### with adjustment
@@ -172,6 +173,3 @@ thresh <- min(top_af)
 af_binary <- +(af_mat_resamped >= thresh)
 prop_adaptive_af <- estimate_pa(af_binary, ndigits = 4, show.plot = T, na.rm = T)
 prop_adaptive_af #.164
-
-## these results still leave much to be desired. coop and lee 2017; buffalo and coop 2020; silas tittes
-## 
