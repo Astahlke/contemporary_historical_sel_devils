@@ -13,7 +13,7 @@ library(dplyr)
 ## are gwb candidates (not under contemporary selection) enriched?
 ## Sig PAML GWB against all tested in PAML
 
-contemporary_universe <- read.delim("all_composite_stat_results/2019-2-22/results/annotation_top100.0/composite.snps.everything.top.genes.100000bp.txt",
+contemporary_universe <- read.delim("all_composite_stat_results/2020-10-22/results/annotation_top100.0/composite.snps.everything.top.genes.100000bp.txt",
                        header = FALSE, col.names = c("beg_scaffold", 
                                                      "beg_chr_start", "beg_chr_stop", "compstat", 
                                                      "end_scaffold", "end_chr_start", "end_chr_stop", 
@@ -22,7 +22,7 @@ contemporary_universe <- read.delim("all_composite_stat_results/2019-2-22/result
 head(contemporary_universe)
 contemporary_universe <- str_split(contemporary_universe$annotation, ":", simplify = TRUE)[,1]
 
-contemporary_sel <-read.delim("all_composite_stat_results/2019-2-22/results/annotation_top1.0/composite.snps.everything.top.genes.100000bp.txt",
+contemporary_sel <-read.delim("all_composite_stat_results/2020-10-22/results/annotation_top1.0/composite.snps.everything.top.genes.100000bp.txt",
                               header = FALSE, col.names = c("beg_scaffold", 
                                                             "beg_chr_start", "beg_chr_stop", "compstat", 
                                                             "end_scaffold", "end_chr_start", "end_chr_stop", 
@@ -42,12 +42,12 @@ compstat_paml_universe <- semi_join(paml_results, data.frame(ensembl_gene_id = c
 compstat_paml_universe$ID <- "compstat_paml_universe"
 
 # foreground
-sig_historical_contemporary <- filter(compstat_paml_universe, pval < .05)
+sig_historical_contemporary <- dplyr::filter(compstat_paml_universe, pval < .05)
 sig_historical_contemporary$ID <- "sig_historical_contemporary"
 
 ## Are genes of the GWB under positive selection enriched for function?
 historical <- anti_join(paml_results, data.frame(ensembl_gene_id = contemporary_sel))
-sig_historical <- filter(historical, pval < .05)
+sig_historical <- dplyr::filter(historical, pval < .05)
 sig_historical$ID <- "sig_historical"
 ## these are a subset of the genome-wide background paml universe
 paml_universe <- paml_results$ensembl_gene_id
@@ -142,6 +142,7 @@ hugo_ids[hugo_ids == ""] <- NA
 hugo_ids <- hugo_ids[-which(is.na(hugo_ids[,'hgnc_symbol'])),]
 hugo_ids[which(duplicated(hugo_ids$hgnc_symbol)),]
 historical_nocontemporary <- hugo_ids
+
 #### compstat_paml_universe ####
 genelist <- compstat_paml_universe$ensembl_gene_id
 hugo_ids = getBM(attributes = c('ensembl_gene_id', 'hgnc_symbol'), 
@@ -181,28 +182,16 @@ compstat_paml_universe_hugo <- hugo_ids
 # devtools::install_github('oganm/MSigDB')
 library(MSigDB)
 
-# library("purrr")
-# y <- list(hist_nosel_hugo =hist_nosel_hugo$hgnc_symbol, hist_sel_can_hugo = hist_sel_can_hugo$hgnc_symbol )
 
-names(MSigDB)
-# [1] "HALLMARK"                 
-# [3] "C2_CURATED"               
-# [5] "C4_COMPUTATIONAL"         
-# [6] "C5_GENE_ONTOLOGY"         
-# [7] "C6_ONCOGENIC_SIGNATURES"  
-# [8] "C7_IMMUNOLOGIC_SIGNATURES"
-
-# build_contingency_tbl <- function(query, geneset) 
-
+# names(MSigDB)
+# # [1] "HALLMARK"                 
+# # [3] "C2_CURATED"               
+# # [5] "C4_COMPUTATIONAL"         
+# # [6] "C5_GENE_ONTOLOGY"         
+# # [7] "C6_ONCOGENIC_SIGNATURES"  
+# # [8] "C7_IMMUNOLOGIC_SIGNATURES"
 
 MSigDB_ofinterest <- c("HALLMARK", "C2_CURATED", "C4_COMPUTATIONAL", "C7_IMMUNOLOGIC_SIGNATURES")
-
-# query_background <- data.frame(query_name=c("contemporary_sel_hugo",
-                               #              "hist_sel_wg_hugo"), 
-                               # background_name=c("contemporary_universe_hugo", 
-                               #                   "paml_universe"))
-
-sig_all_query_background <- c()
 
 #### contemporary_universe ####
 genelist <- contemporary_universe
@@ -268,37 +257,107 @@ hugo_ids <- hugo_ids[-which(is.na(hugo_ids[,'hgnc_symbol'])),]
 hugo_ids[which(duplicated(hugo_ids$hgnc_symbol)),]
 hist_sig_can_hugo <- hugo_ids
 
-
-
 #####
+
+all_query_background <- c()
 
 query_name <- "contemporary_sel_hugo"
 background_name <- "contemporary_universe_hugo"
-
-## candidates for contemporary and historical
-query_name <- "hist_sel_wg_hugo" 
-background_name <- "paml_universe_hugo"
-
-## candidates for contemporary and historical
-query_name <- "hist_sel_can_hugo"
-background_name <- "compstat_paml_universe_hugo"
-
-# compstat_paml_universe
 
 query <- get(query_name)$hgnc_symbol
 my_background <- get(background_name)$hgnc_symbol
 m <- length(query)
 y <- c()
+
 for (j in 1:length(MSigDB_ofinterest)){
   # j <- length(MSigDB_ofinterest)
   db_name <- MSigDB_ofinterest[j]
   # [1] "HALLMARK"                 
   # [3] "C2_CURATED"               
   # [5] "C4_COMPUTATIONAL"         
-  # [6] "C5_GENE_ONTOLOGY"         
-  # [7] "C6_ONCOGENIC_SIGNATURES"  
   # [8] "C7_IMMUNOLOGIC_SIGNATURES"
   db <- MSigDB[[db_name]]
+  for (i in 1:length(db)){
+    cat(db_name, query_name, background_name, names(db[i]), sep = "\n") 
+    background <- intersect(my_background, db[[i]])
+    N <- length(background)
+    x_intersect <- intersect(query, background)
+    gsea <- data.frame(db_name=db_name,
+                       background_name = background_name,
+                       query_name = query_name,
+                       geneset_name = names(db[i]),
+                       N = N, # gene universe; all balls in the urn
+                       m = m, # genes under selection; all white balls in urn
+                       x = length(x_intersect), # genes under sel and in gene set
+                       n = N - length(x_intersect), # genes in background, not under sel; black balls
+                       prop_overlap = length(x_intersect)/length(background),
+                       overlap = paste(x_intersect, collapse = ";"))
+    # Use the dhyper built-in function for hypergeometric density
+    probabilities <- mutate(gsea, pval=(dhyper(c(0:gsea$x), 
+                                               gsea$m, 
+                                               gsea$n, 
+                                               gsea$x, log = FALSE)[1]))
+    y <- rbind(y, probabilities)
+  }
+}
+write.csv(y, file = paste(query_name, background_name, "raw_geneset_enrichment_.csv", sep="_"),
+          row.names = FALSE,
+          quote = FALSE)
+all_query_background <- rbind(y, all_query_background)
+
+
+## candidates for contemporary and historical
+query_name <- "hist_sel_wg_hugo" 
+background_name <- "paml_universe_hugo"
+
+query <- get(query_name)$hgnc_symbol
+my_background <- get(background_name)$hgnc_symbol
+m <- length(query)
+y <- c()
+for (j in 1:length(MSigDB_ofinterest)){
+  db_name <- MSigDB_ofinterest[j]
+  db <- MSigDB[[db_name]]
+
+    for (i in 1:length(db)){
+    cat(db_name, query_name, background_name, names(db[i]), sep = "\n") 
+    background <- intersect(my_background, db[[i]])
+    N <- length(background)
+    x_intersect <- intersect(query, background)
+    gsea <- data.frame(db_name=db_name,
+                       background_name = background_name,
+                       query_name = query_name,
+                       geneset_name = names(db[i]),
+                       N = N, # gene universe; all balls in the urn
+                       m = m, # genes under selection; all white balls in urn
+                       x = length(x_intersect), # genes under sel and in gene set
+                       n = N - length(x_intersect), # genes in background, not under sel; black balls
+                       prop_overlap = length(x_intersect)/length(background),
+                       overlap = paste(x_intersect, collapse = ";"))
+    # Use the dhyper built-in function for hypergeometric density
+    probabilities <- mutate(gsea, pval=(dhyper(c(0:gsea$x), 
+                                               gsea$m, 
+                                               gsea$n, 
+                                               gsea$x, log = FALSE)[1]))
+    y <- rbind(y, probabilities)
+  }
+}
+write.csv(y, file = paste(query_name, background_name, "raw_geneset_enrichment_.csv", sep="_"),
+          row.names = FALSE,
+          quote = FALSE)
+all_query_background <- rbind(y, all_query_background)
+
+## candidates for contemporary and historical
+query_name <- "hist_sel_can_hugo"
+background_name <- "compstat_paml_universe_hugo"
+
+query <- get(query_name)$hgnc_symbol
+my_background <- get(background_name)$hgnc_symbol
+m <- length(query)
+y <- c()
+for (j in 1:length(MSigDB_ofinterest)){
+  db_name <- MSigDB_ofinterest[j]
+  db <- MSigDB[[db_name]]
+  
   for (i in 1:length(db)){
     cat(db_name, query_name, background_name, names(db[i]), sep = "\n") 
     background <- intersect(my_background, db[[i]])
@@ -322,70 +381,30 @@ for (j in 1:length(MSigDB_ofinterest)){
     y <- rbind(y, probabilities)
   }
 }
-sig <- filter(y, pval < .001 & N >10) %>%
-  arrange(desc(x))
-sig
-  write.csv(y, file = paste(query_name, background_name, "raw_geneset_enrichment_.csv", sep="_"),
+write.csv(y, file = paste(query_name, background_name, "raw_geneset_enrichment_.csv", sep="_"),
           row.names = FALSE,
           quote = FALSE)
-sig_all_query_background <- rbind(sig, sig_all_query_background)
+all_query_background <- rbind(y, all_query_background)
 
+all_query_background %>%
+  count(query_name)
 
-sig_all_query_background[which(duplicated(sig_all_query_background$geneset_name)),]
+all_query_background %>% 
+  mutate(p_adj = p.adjust(pval, method = "BH")) %>%
+  dplyr::filter(p_adj < .01 & N > 10) %>% 
+  count(query_name)
 
-query_name <- "contemporary_sel_hugo"
-background_name <- "contemporary_universe_hugo"
-  
-gene_query <- read.csv(paste(query_name, background_name, "raw_geneset_enrichment_.csv", sep="_"))
-assign(paste(query_name, background_name, "results", sep = "_"), gene_query)
+write.csv(all_query_background,  file = paste("all_query_background_raw_geneset_enrichment_.csv", sep="_"),
+          row.names = FALSE,
+          quote = FALSE)
 
+sig_all_query_background <- all_query_background %>% 
+  mutate(p_adj = p.adjust(pval, method = "BH")) %>%
+  dplyr::filter(p_adj < .01 & N > 10)
 
-## candidates for contemporary and historical
-query_name <- "hist_sig_wg_hugo"
-background_name <- "paml_universe_hugo"
+shared_hist_contemporary <- sig_all_query_background[which(duplicated(sig_all_query_background$geneset_name)),]
+nrow(shared_hist_contemporary)
 
-gene_query <- read.csv(paste(query_name, background_name, "raw_geneset_enrichment_.csv", sep="_"))
-assign(paste(query_name, background_name, "results", sep = "_"), gene_query)
-
-
-## candidates for contemporary and historical
-query_name <- "hist_sig_can_hugo"
-background_name <- "compstat_paml_universe_hugo"
-
-gene_query <- read.csv(paste(query_name, background_name, "raw_geneset_enrichment_.csv", sep="_"))
-assign(paste(query_name, background_name, "results", sep = "_"), gene_query)
-
-# ## filter out the GO term testing because it seems a bit wacky
-# contemporary_sel_hugo_contemporary_universe_hugo_results <- contemporary_sel_hugo_contemporary_universe_hugo_results[-c(grep('GO', 
-#      contemporary_sel_hugo_contemporary_universe_hugo_results$geneset_name)),]
-# 
-# hist_sig_wg_hugo_paml_universe_hugo_results <- hist_sig_wg_hugo_paml_universe_hugo_results[-c(grep('GO', hist_sig_wg_hugo_paml_universe_hugo_results$geneset_name)),]
-# 
-# hist_sig_can_hugo_compstat_paml_universe_hugo_results <- hist_sig_can_hugo_compstat_paml_universe_hugo_results[-c(grep('GO', hist_sig_can_hugo_compstat_paml_universe_hugo_results$geneset_name)),]
-
-## correct by FDR before binding
-hist_sig_wg_hugo_paml_universe_hugo_results <- mutate(hist_sig_wg_hugo_paml_universe_hugo_results, 
-       p_adj = p.adjust(pval, method = "bonferroni")) %>%
-  arrange((p_adj)) %>%
-  filter(pval < .01 & N >10)
-
-hist_sig_can_hugo_compstat_paml_universe_hugo_results <- mutate(hist_sig_can_hugo_compstat_paml_universe_hugo_results, 
-                                                      p_adj = p.adjust(pval, method = "bonferroni")) %>%
-  arrange((p_adj)) %>%
-  filter(pval < .01 & N >1)
-
-contemporary_sel_hugo_contemporary_universe_hugo_results <- mutate(contemporary_sel_hugo_contemporary_universe_hugo_results, 
-                                                                   p_adj = p.adjust(pval, method = "bonferroni")) %>%
-  arrange((p_adj)) %>%
-  filter(pval < .01 & N >1)
-
-
-allresults <- rbind(contemporary_sel_hugo_contemporary_universe_hugo_results,
-                    hist_sig_wg_hugo_paml_universe_hugo_results,
-                    hist_sig_can_hugo_compstat_paml_universe_hugo_results)
-
-
-allresults
 
 geneset_name <- data.frame(geneset_name=allresults[duplicated(allresults$geneset_name),]$geneset_name)
 write.csv(semi_join(allresults, geneset_name), 
@@ -393,42 +412,16 @@ write.csv(semi_join(allresults, geneset_name),
           row.names = FALSE,
           quote = FALSE)
 
-arrange(y, pval)[1:10,query_name]
-
-contemporary_enriched <- y
-colnames(compstat_enriched) # missing background name and prop_overlap
-hist_wg_sel_enriched <- y
-hist_contemp_enriched <- y
-
-# are historical canididates enriched for any gene set greater than expected from their background?
-# hist_sel_wg_hugo vs hist_nosel
-
-# are contemporary enriched for any gene set greater than expected from their background?
-# hist_sel_wg_hugo vs hist_nosel
-
-
-# get_hugoids <- function(gene_list) {
-#   hugo_ids <- getBM(attributes = c('ensembl_gene_id', 'hgnc_symbol'), 
-#                    filters = 'ensembl_gene_id', 
-#                    values = gene_list, 
-#                    mart = mart)
-#   
-#   hugo_ids[hugo_ids == ""] <- NA
-#   hugo_ids <- hugo_ids[-which(is.na(hugo_ids[,'hgnc_symbol'])),]
-#   hugo_ids[which(duplicated(hugo_ids$hgnc_symbol)),]
-#   
-#   assign(x = paste0(names(gene_list)), value = hugo_ids)
-#   # contemporary_hist_universe_hugo <- hugo_ids  
-# }
-
 
 #### permutation test ####
 ### do contemporary candidates share geneset enrichment more often than expected by chance? ###
 
 ## filter for these GWB genesets first
-sig_GWB_genesets <- read.csv("sig_GWB_genesets.csv", stringsAsFactors = FALSE, header = FALSE)
-sig_GWB_genesets <- as.character(sig_GWB_genesets$V1)
+sig_GWB_genesets <- sig_all_query_background %>% 
+  dplyr::filter(query_name == "hist_sel_wg_hugo") %>% 
+  dplyr::select(geneset_name) 
 
+sig_GWB_genesets <- as.character(sig_GWB_genesets$geneset_name)
 
 subset_genesets <- function(x) {  
   sg <- x[which(names(x) %in% sig_GWB_genesets)]
@@ -460,17 +453,12 @@ y <- c()
 
 for (Q in 1: length(x_chunks)) {
   query_name <- paste0("permutated_contemporary_", Q) 
-  query <- query_list[,Q] 
+  query <- query_list[Q] 
   my_background <- contemporary_hugo$hgnc_symbol
   m <- length(query)
   for (j in 1:length(MSigDB_ofinterest)){
     db_name <- MSigDB_ofinterest[j]
     cat(db_name, query_name, "\n") 
-    # [1] "HALLMARK"                 
-    # [3] "C2_CURATED"               
-    # [5] "C4_COMPUTATIONAL"         
-    # [7] "C6_ONCOGENIC_SIGNATURES"  
-    # [8] "C7_IMMUNOLOGIC_SIGNATURES"
     db <- subset_sigGWB_genesets[[db_name]]
     for (i in 1:length(db)){
     if(length(subset_sigGWB_genesets[[db_name]])<1){
@@ -499,7 +487,6 @@ for (Q in 1: length(x_chunks)) {
         cat(names(db[i]), "intersect", x_intersect, "\n")
       }
       y <- rbind(y, probabilities)
-      cat("top geneset overlap", as.character(arrange(y, desc(pval))$geneset_name[1]),  "\n")
     }
   }
 }
