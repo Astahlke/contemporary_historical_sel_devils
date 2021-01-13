@@ -9,10 +9,10 @@ contemporary_historical_sel_devils/contemporary/angsd_2019-01-18/results/
 - Genotype likelihoods and allele frequency inputs can be found on dryad:https://doi.org/10.5061/dryad.jq2bvq872 
 
 ### historical
-- Orthology tables for devil, koala, oppossum, and tammar wallaby are found in 
+Orthology tables for devil, koala, oppossum, and tammar wallaby are found in 
 contemporary_historical_sel_devils/historical/00-getorthologID/
-- candidate_orthologtable_110117.tsv
-- wholegenome_orthologtable_110717.tsv
+- KoalaDevilOrthologs_12864_2014_6686_MOESM2_ESM.csv
+- wholegenome_orthologtable.tsv
 
 ## Scripts
 ### contemporary
