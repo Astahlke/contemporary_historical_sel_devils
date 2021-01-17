@@ -37,15 +37,13 @@ contemporary_historical_sel_devils/historical/00-getorthologID/
 
 ## compare
 - test_for_ongoing_selection.R
-- OverRepresentation_MSigDB.R
 - candidatelistcomparison.R
 
 ## Key Results 
 - composite stat for contemporary selection: contemporary/angsd_2019-01-18/next/composite_stat/2019-2-22/results/annotation_top1.0/composite.snps.everything.top.genes.100000bp.txt 
 - combined raw paml results: 
 contemporary_historical_sel_devils/historical/04-parsed_paml_out/
-	-  paml_nullBS_wgcan_koala_111617.tsv 
+	- paml_nullBS_wgcan_koala_111617.tsv 
 	- paml_posiBS_wgcan_koala_111617.tsv
 - Likelihood ratio test for all paml results: contemporary_historical_sel_devils/historical/all_paml_results.csv 
-- Gene set overlap results: compare/ongoing_selection_functional.csv 
-
+- Gene set overlap results: permutation histogram 
