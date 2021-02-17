@@ -1,0 +1,234 @@
+cat: sort: No such file or directory
+Loading required package: methods
+Loading required package: AnnotationDbi
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:parallel’:
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, append, as.data.frame, cbind, colMeans, colnames,
+    colSums, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, lengths, Map, mapply, match,
+    mget, order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rowMeans, rownames, rowSums, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which, which.max, which.min
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+Loading required package: IRanges
+Loading required package: S4Vectors
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:base’:
+
+    expand.grid
+
+
+hash-2.2.6 provided by Decision Patterns
+
+
+Attaching package: ‘hash’
+
+The following object is masked from ‘package:AnnotationDbi’:
+
+    keys
+
+The following objects are masked from ‘package:IRanges’:
+
+    values, values<-
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    values, values<-
+
+Loading required package: GenomicRanges
+Loading required package: GenomeInfoDb
+Warning messages:
+1: replacing previous import ‘AnnotationDbi::keys’ by ‘hash::keys’ when loading ‘SNP2GO’ 
+2: replacing previous import ‘hash::values’ by ‘GenomicRanges::values’ when loading ‘SNP2GO’ 
+3: replacing previous import ‘hash::values<-’ by ‘GenomicRanges::values<-’ when loading ‘SNP2GO’ 
+
+Attaching package: ‘igraph’
+
+The following object is masked from ‘package:GenomicRanges’:
+
+    union
+
+The following object is masked from ‘package:IRanges’:
+
+    union
+
+The following object is masked from ‘package:S4Vectors’:
+
+    union
+
+The following objects are masked from ‘package:BiocGenerics’:
+
+    normalize, union
+
+The following objects are masked from ‘package:stats’:
+
+    decompose, spectrum
+
+The following object is masked from ‘package:base’:
+
+    union
+
+Processing /mnt/lfs2/bepstein/devilsrapture/data/annotation/go_150413/Sarcophilus_harrisii.DEVIL7.0.79.gtf.gz
+Processing /mnt/lfs2/bepstein/devilsrapture/data/annotation/go_150413/goterms.tsv
+Mapping GO terms to genomic regions
+Organizing GO categories by level
+Calculating number of candidate SNPs and non-candidate SNPs
+associated with GO terms from different ontology levels:
+candidates associated with the MF ontology:
+Level 16: 0
+Level 15: 0
+Level 14: 0
+Level 13: 1
+Level 12: 2
+Level 11: 3
+Level 10: 8
+Level 9: 26
+Level 8: 32
+Level 7: 41
+Level 6: 55
+Level 5: 58
+Level 4: 62
+Level 3: 67
+Level 2: 69
+Level 1: 69
+noncandidates associated with the MF ontology:
+Level 16: 0
+Level 15: 69
+Level 14: 80
+Level 13: 125
+Level 12: 195
+Level 11: 450
+Level 10: 942
+Level 9: 2236
+Level 8: 2805
+Level 7: 4034
+Level 6: 5392
+Level 5: 5988
+Level 4: 6153
+Level 3: 6820
+Level 2: 6871
+Level 1: 6871
+candidates associated with the BP ontology:
+Level 20: 0
+Level 19: 1
+Level 18: 2
+Level 17: 2
+Level 16: 2
+Level 15: 8
+Level 14: 17
+Level 13: 21
+Level 12: 29
+Level 11: 37
+Level 10: 41
+Level 9: 49
+Level 8: 56
+Level 7: 59
+Level 6: 61
+Level 5: 62
+Level 4: 62
+Level 3: 62
+Level 2: 62
+Level 1: 62
+noncandidates associated with the BP ontology:
+Level 20: 0
+Level 19: 15
+Level 18: 77
+Level 17: 157
+Level 16: 326
+Level 15: 724
+Level 14: 1497
+Level 13: 2585
+Level 12: 3178
+Level 11: 3943
+Level 10: 4547
+Level 9: 5009
+Level 8: 5636
+Level 7: 5840
+Level 6: 6129
+Level 5: 6256
+Level 4: 6372
+Level 3: 6409
+Level 2: 6443
+Level 1: 6456
+candidates associated with the CC ontology:
+Level 18: 0
+Level 17: 0
+Level 16: 0
+Level 15: 0
+Level 14: 3
+Level 13: 7
+Level 12: 14
+Level 11: 34
+Level 10: 35
+Level 9: 37
+Level 8: 45
+Level 7: 45
+Level 6: 53
+Level 5: 58
+Level 4: 63
+Level 3: 63
+Level 2: 64
+Level 1: 64
+noncandidates associated with the CC ontology:
+Level 18: 0
+Level 17: 4
+Level 16: 18
+Level 15: 134
+Level 14: 446
+Level 13: 828
+Level 12: 1574
+Level 11: 2952
+Level 10: 3348
+Level 9: 3635
+Level 8: 4772
+Level 7: 4868
+Level 6: 5272
+Level 5: 6003
+Level 4: 6233
+Level 3: 6249
+Level 2: 6367
+Level 1: 6367
+Updating mappings of GO terms to SNPs and genomic regions
+for inclusive analysis
+Testing GO terms for over-representation of candidate SNPs
+Found 1 significant GO terms.
+Testing significant GO terms for local effects
+Warning messages:
+1: In .Seqinfo.mergexy(x, y) :
+  Each of the 2 combined objects has sequence levels not in the other:
+  - in 'x': GL834412.1, GL834413.1, GL834414.1, GL834415.1, GL834416.1, GL834417.1, GL834418.1, GL834419.1, GL834420.1, GL834421.1, GL834422.1, GL834423.1, GL834424.1, GL834425.1, GL834426.1, GL834427.1, GL834428.1, GL834429.1, GL834431.1, GL834434.1, GL834435.1, GL834436.1, GL834437.1, GL834438.1, GL834439.1, GL834440.1, GL834441.1, GL834442.1, GL834443.1, GL834444.1, GL834445.1, GL834446.1, GL834447.1, GL834448.1, GL834450.1, GL834451.1, GL834452.1, GL834453.1, GL834454.1, GL834455.1, GL834456.1, GL834457.1, GL834458.1, GL834459.1, GL834460.1, GL834461.1, GL834462.1, GL834463.1, GL834465.1, GL834467.1, GL834469.1, GL834470.1, GL834471.1, GL834472.1, GL834474.1, GL834475.1, GL834477.1, GL834480.1, GL834481.1, GL834482.1, GL834483.1, GL834484.1, GL834485.1, GL834486.1, GL834487.1, GL834488.1, GL834489.1, GL834490.1, GL834491.1, GL834492.1, GL834493.1, GL834494.1, GL834495.1, GL834496.1, GL834498.1, GL834499.1, GL83450 [... truncated]
+2: In .Seqinfo.mergexy(x, y) :
+  Each of the 2 combined objects has sequence levels not in the other:
+  - in 'x': GL834415.1, GL834435.1, GL834439.1, GL834443.1, GL834444.1, GL834456.1, GL834457.1, GL834470.1, GL834490.1, GL834491.1, GL834494.1, GL834495.1, GL834499.1, GL834503.1, GL834504.1, GL834505.1, GL834510.1, GL834522.1, GL834523.1, GL834524.1, GL834525.1, GL834526.1, GL834529.1, GL834531.1, GL834533.1, GL834537.1, GL834545.1, GL834547.1, GL834552.1, GL834553.1, GL834555.1, GL834556.1, GL834557.1, GL834561.1, GL834562.1, GL834563.1, GL834565.1, GL834566.1, GL834571.1, GL834572.1, GL834573.1, GL834574.1, GL834575.1, GL834576.1, GL834584.1, GL834585.1, GL834588.1, GL834592.1, GL834594.1, GL834597.1, GL834598.1, GL834611.1, GL834612.1, GL834613.1, GL834614.1, GL834619.1, GL834626.1, GL834636.1, GL834639.1, GL834640.1, GL834645.1, GL834649.1, GL834669.1, GL834672.1, GL834673.1, GL834689.1, GL834697.1, GL834702.1, GL834703.1, GL834705.1, GL834708.1, GL834721.1, GL834725.1, GL834729.1, GL834735.1, GL834737.1, GL83474 [... truncated]
+3: In .Seqinfo.mergexy(x, y) :
+  Each of the 2 combined objects has sequence levels not in the other:
+  - in 'x': GL834815.1, GL841816.1, GL850771.1, GL851098.1, GL854388.1, GL857872.1
+  - in 'y': GL834412.1, GL834413.1, GL834414.1, GL834416.1, GL834417.1, GL834418.1, GL834419.1, GL834420.1, GL834421.1, GL834422.1, GL834423.1, GL834424.1, GL834425.1, GL834426.1, GL834427.1, GL834428.1, GL834429.1, GL834430.1, GL834431.1, GL834434.1, GL834436.1, GL834437.1, GL834438.1, GL834440.1, GL834441.1, GL834442.1, GL834445.1, GL834446.1, GL834447.1, GL834448.1, GL834449.1, GL834450.1, GL834451.1, GL834452.1, GL834453.1, GL834454.1, GL834455.1, GL834458.1, GL834459.1, GL834460.1, GL834461.1, GL834462.1, GL834463.1, GL834465.1, GL834467.1, GL834469.1, GL834471.1, GL834472.1, GL834474.1, GL834475.1, GL834476.1, GL834477.1, GL834480.1, GL834481.1, GL834482.1, GL834483.1, GL834484.1, GL834485.1, GL834486.1, GL834487.1, GL834488.1, GL834489.1, GL834492.1, GL834493.1, GL834496.1, GL834498.1, GL834500.1, GL834501.1, GL834502.1, GL834506 [... truncated]
+4: In .Seqinfo.mergexy(x, y) :
+  Each of the 2 combined objects has sequence levels not in the other:
+  - in 'x': GL834433.1, GL834754.1, GL835214.1, GL835458.1, GL835635.1, GL841215.1, GL841816.1, GL841922.1, GL842679.1, GL842963.1, GL846285.1, GL850107.1, GL850771.1, GL851055.1, GL854388.1, GL855277.1, GL857621.1, GL857872.1, GL860631.1, GL861804.1, GL864272.1, GL864803.1, GL865063.1, GL865147.1, GL865162.1, GL865227.1, GL865524.1, GL834430.1, GL834449.1, GL834476.1, GL834515.1, GL834519.1, GL834520.1, GL834536.1, GL834601.1, GL834655.1, GL834663.1, GL834664.1, GL834695.1, GL834700.1, GL834774.1, GL834797.1, GL834832.1, GL834839.1, GL834841.1, GL834852.1, GL834857.1, GL834860.1, GL834876.1, GL834880.1, GL834885.1, GL834913.1, GL834918.1, GL834955.1, GL834964.1, GL834965.1, GL834974.1, GL834977.1, GL834979.1, GL835011.1, GL835014.1, GL835031.1, GL835036.1, GL835042.1, GL835069.1, GL835077.1, GL835078.1, GL835107.1, GL835136.1, GL835145.1, GL835152.1, GL835162.1, GL835164.1, GL835170.1, GL835173.1, GL835176.1, GL83517 [... truncated]
