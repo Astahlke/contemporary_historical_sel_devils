@@ -45,5 +45,5 @@ contemporary_historical_sel_devils/historical/00-getorthologID/
 contemporary_historical_sel_devils/historical/04-parsed_paml_out/
 	- paml_nullBS_wgcan_koala_111617.tsv 
 	- paml_posiBS_wgcan_koala_111617.tsv
-- Likelihood ratio test for all paml results: contemporary_historical_sel_devils/historical/all_paml_results.csv 
+- Likelihood ratio test for all paml results: contemporary_historical_sel_devils/historical/paml_LRT_21-1-13.csv 
 - Gene set overlap results: permutation histogram 
